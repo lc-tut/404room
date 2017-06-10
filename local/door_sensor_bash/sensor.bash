@@ -32,7 +32,7 @@ do
 
     # echo "TRUE"
 
-    TOKEN='xoxp-130051526656-130079188785-195050850787-fe2074a10d562f6ef2ee62303a35eeba'
+    TOKEN='YourTOKEN'
     USER='doorBot'
     CHANNEL='random'
     MESSAGE='Door Opened DATE'
