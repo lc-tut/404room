@@ -38,7 +38,6 @@ do
   if [ $count = "1" ]
   then
 
-    ### Debug
     echo "Door OPEN"
 
     ### Check first OPEN on day
@@ -52,9 +51,9 @@ do
 
       ### Post to Slack
       TOKEN='YourTOKEN'
-      USER='doorBot'
+      USER='DoorBot'
       CHANNEL='random'
-      MESSAGE='Door Opened DATE'
+      MESSAGE="The door was opened at $(date +'%H:%M:%S')"
 
       curl -XPOST -d "token=$TOKEN" \
                   -d "channel=#$CHANNEL" \
