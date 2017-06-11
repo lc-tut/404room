@@ -25,7 +25,7 @@ do
   then
 
     ### Door OPEN
-    count=$(expr $count + 1)
+    let count++
 
   else
 
