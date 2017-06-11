@@ -11,7 +11,7 @@ RaspiでDoorSensorを制御するシェルスクリプト
 
 ## Image
 
-<img src="https://github.com/tomoyk/DoorSensor/blob/master/DoorSensor.png?raw=true" width="500" height="400" />
+<img src="https://github.com/tomoyk/DoorSensor/blob/master/DoorSensor.png?raw=true" width="320" height="400" />
 
 ## License
 
