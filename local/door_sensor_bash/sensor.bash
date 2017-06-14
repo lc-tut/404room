@@ -50,22 +50,21 @@ do
       day="$(date +'%y%m%d')"
 
       ### Post to Slack
-      TOKEN='YourTOKEN'
+      TOKEN=''
       USER='DoorBot'
       CHANNEL='random'
       MESSAGE="The door was opened at $(date +'%H:%M:%S')"
 
-      curl -XPOST -d "token=$TOKEN" \
-                  -d "channel=#$CHANNEL" \
-                  -d "text=$MESSAGE" \
-                  -d "username=$USER" \
-                  "https://slack.com/api/chat.postMessage" &
+      #curl -s -XPOST -d "token=$TOKEN" \
+      #               -d "channel=#$CHANNEL" \
+      #               -d "text=$MESSAGE" \
+      #               -d "username=$USER" \
+      #               "https://slack.com/api/chat.postMessage" >& /dev/null &
 
     fi
 
     ### Original Actions
-    mpg321 -g 1000 Anal/push.mp3 2>&1 > /dev/null
-    mpg321 -g 1000 Anal/suiso.mp3 2>&1 > /dev/null
+    mpg321 -g 500 /home/pi/out.mp3 >&/dev/null &
 
   ### Door CLOSE
   else
