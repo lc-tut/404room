@@ -1,10 +1,10 @@
 #!/bin/bash
 
-flist=( $(ls *.mp3 *.wav) )
+flist=( $(ls sounds/*.mp3 sounds/*.wav) )
 
-key=`expr $RANDOM % $(ls *.mp3 *.wav|wc -l)`
+key=`expr $RANDOM % $(ls sounds/*.mp3 sounds/*.wav|wc -l)`
 
 # echo ${flist[@]}
 echo $key
 
-aplay ${flist[$key]}
+afplay ${flist[$key]}
