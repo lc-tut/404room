@@ -25,11 +25,13 @@ do
   then
 
     ### Door OPEN
+    echo "Door OPEN"
     let count++
 
   else
 
     ### Door CLOSE
+    echo "Door CLOSE"
     count=0
 
   fi
@@ -37,8 +39,6 @@ do
   ### Door OPEN
   if [ $count = "1" ]
   then
-
-    echo "Door OPEN"
 
     ### Check first OPEN on day
     if [ $day != "$(date +'%y%m%d')" ]
@@ -64,12 +64,16 @@ do
     fi
 
     ### Original Actions
-    mpg321 -g 500 /home/pi/out.mp3 >&/dev/null &
+    flist=( $(ls /home/pi/sounds/*.wav) )
+    key=`expr $RANDOM % ${#flist[*]}`
+
+    aplay ${flist[$key]}
 
   ### Door CLOSE
   else
 
-    echo "Door CLOSE"
+    # handle
+    :
 
   fi
   
