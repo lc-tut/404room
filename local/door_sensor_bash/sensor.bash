@@ -70,7 +70,8 @@ do
     aplay ${flist[$key]}
 
   ### Door CLOSE
-  else
+  elif [ $count = "0" ]
+  then
 
     # handle
     :
