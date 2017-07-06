@@ -6,7 +6,7 @@ class ApiController < ApplicationController
   end
   
   def show
-    @log = Log.limit(20)
+    @log = Log.order(id: "DESC").limit(20)
     render json: @log
   end
 end
