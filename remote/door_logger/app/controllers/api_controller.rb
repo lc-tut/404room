@@ -2,7 +2,7 @@ class ApiController < ApplicationController
   def create
     @log = Log.new()
     @log.save!
-    render json: {isSuccess: true}
+    render json: Log.last
   end
   
   def show
