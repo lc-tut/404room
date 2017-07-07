@@ -16,7 +16,7 @@ body {
 </style>
 
 <img src="close.png" id=door />
-<div id=text></div>
+<div id=text>ドアに接続しています。<br>connecting to door.</div>
 
 <script>
 function count2image(count) {
@@ -32,8 +32,14 @@ var state = {opened: "closed", count: 0};
 
 ws = new WebSocket("ws://" + location.host + "/socket");
 ws.onopen = console.log;
-ws.onclose = console.error;
-ws.onerror = console.error;
+ws.onclose = function(ev) {
+	console.error(ev);
+	document.getElementById("text").innerHTML = "ドアに切断されました。<br>door connection was closed.";
+}
+ws.onerror = function(ev) {
+	console.error(ev);
+	document.getElementById("text").innerHTML = "ドアでエラーが発生しました。<br>door has error.";
+}
 ws.onmessage = function(ev) {
 	console.log(ev);
 
