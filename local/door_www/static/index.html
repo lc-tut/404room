@@ -18,6 +18,9 @@ body {
 <img src="close.png" id=door />
 <div id=text>ドアに接続しています。<br>connecting to door.</div>
 
+<audio src="/opened.mp3" id=opened_sound />
+<audio src="/closed.mp3" id=closed_sound />
+
 <script>
 function count2image(count) {
 	result = '';
@@ -29,6 +32,8 @@ function count2image(count) {
 }
 
 var state = {opened: "closed", count: 0};
+var opened_sound = document.getElementById("opened_sound");
+var closed_sound = document.getElementById("closed_sound");
 
 ws = new WebSocket("ws://" + location.host + "/socket");
 ws.onopen = console.log;
@@ -50,10 +55,16 @@ ws.onmessage = function(ev) {
 		document.getElementById("door").src = "/close.png";
 
 		textarea.innerHTML = "ドアは閉まっています。<br>door is closed.";
+
+		opened_sound.currentTime = 0;
+		opened_sound.play();
 	} else {
 		document.getElementById("door").src = "/open.png";
 
 		textarea.innerHTML = count2image(state.count);
+
+		closed_sound.currentTime = 0;
+		closed_sound.play();
 	}
 }
 </script>
