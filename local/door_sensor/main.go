@@ -42,6 +42,16 @@ func main() {
 	count := 0
 	state := false
 
+	go func() {
+		for {
+			now := time.Now()
+			tomorrow := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
+			time.Sleep(tomorrow.Sub(now) * time.Second)
+
+			count = 0
+		}
+	}()
+
 	sendState := func() {
 		stateChar := 'C'
 		if state {
