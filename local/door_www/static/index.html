@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<style>
+body {
+	text-align: center;
+}
+#door {
+	height: 40em;
+	width: auto;
+}
+.textimg {
+	display: inline-block;
+	height: 5em;
+	width: auto;
+}
+</style>
+
+<img src="open.png" id=door />
+<div id=text></div>
+
+<script>
+function count2image(count) {
+	result = '';
+	while (count > 0) {
+		result = '<img class="textimg" src="/' + (count%10) + '.png">' + result;
+		count = Math.floor(count / 10);
+	}
+	return result + '<img class="textimg" src="/door-open-text.png">';
+}
+
+var state = {opened: "closed", count: 0};
+
+ws = new WebSocket("ws://localhost:8080/socket");
+ws.onopen = console.log;
+ws.onclose = console.error;
+ws.onerror = console.error;
+ws.onmessage = function(ev) {
+	console.log(ev);
+
+	state = JSON.parse(ev.data);
+	var textarea = document.getElementById("text");
+
+	if (state.type == "closed") {
+		document.getElementById("door").src = "/close.png";
+
+		textarea.innerHTML = "ドアは閉まっています。<br>door is closed.";
+	} else {
+		document.getElementById("door").src = "/open.png";
+
+		textarea.innerHTML = count2image(state.count);
+	}
+}
+</script>
