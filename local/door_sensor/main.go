@@ -12,7 +12,7 @@ import (
 
 var (
 	SENSOR_PIN = 4
-	SOCKET     = "test.sock"
+	SOCKET     = "/tmp/door.sock"
 )
 
 func main() {

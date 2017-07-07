@@ -23,7 +23,7 @@ func (s State) OpenedStr() string {
 }
 
 func main() {
-	con, err := net.Dial("unix", "../test.sock")
+	con, err := net.Dial("unix", "/tmp/door.sock")
 	if err != nil {
 		panic(err.Error())
 	}
