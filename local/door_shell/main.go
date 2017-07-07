@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	COMMAND = "/home/pi/door_event.sh"
+	COMMAND = "/home/pi/door_event.bash"
 )
 
 type State struct {
@@ -38,6 +38,6 @@ func main() {
 		}
 		state.Opened = stateChar == 'O'
 
-		exec.Command("/bin/sh", COMMAND, state.OpenedStr(), fmt.Sprintf("%d", state.Count)).Run()
+		exec.Command("/bin/bash", COMMAND, state.OpenedStr(), fmt.Sprintf("%d", state.Count)).Run()
 	}
 }
