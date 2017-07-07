@@ -1,6 +1,10 @@
 # DoorSensor
 
-RaspiでDoorSensorを制御するシェルスクリプト
+~~RaspiでDoorSensorを制御するシェルスクリプト.~~
+
+*(追記) 今はslack投稿と音楽再生くらいしか役割がない*
+
+コードは`door_event.bash`に書いてある.
 
 ## Files
 
