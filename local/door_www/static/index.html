@@ -56,15 +56,15 @@ ws.onmessage = function(ev) {
 
 		textarea.innerHTML = "ドアは閉まっています。<br>door is closed.";
 
-		opened_sound.currentTime = 0;
-		opened_sound.play();
+		closed_sound.currentTime = 0;
+		closed_sound.play();
 	} else {
 		document.getElementById("door").src = "/open.png";
 
 		textarea.innerHTML = count2image(state.count);
 
-		closed_sound.currentTime = 0;
-		closed_sound.play();
+		opened_sound.currentTime = 0;
+		opened_sound.play();
 	}
 }
 </script>
