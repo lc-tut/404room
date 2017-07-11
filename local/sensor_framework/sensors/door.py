@@ -3,7 +3,8 @@ from sensors.sensor import Sensor
 import time
 
 class Door(Sensor):
-    def __init__(self):
+    def __init__(self, store):
+        self.store = store
         self.sleep_time = 1
         self.pin_num = 4
 
