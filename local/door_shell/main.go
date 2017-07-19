@@ -2,42 +2,23 @@ package main
 
 import (
 	"fmt"
-	"net"
 	"os/exec"
+
+	"github.com/lc-tut/404room/local/libs/go/door"
 )
 
 var (
 	COMMAND = "/home/pi/door_event.bash"
 )
 
-type State struct {
-	Opened bool
-	Count  int
-}
-
-func (s State) OpenedStr() string {
-	if s.Opened {
-		return "opened"
-	} else {
-		return "closed"
-	}
-}
-
 func main() {
-	con, err := net.Dial("unix", "/tmp/door.sock")
+	conn, err := door.Dial(door.DEFAULT_PATH)
 	if err != nil {
 		panic(err.Error())
 	}
-	defer con.Close()
+	defer conn.Close()
 
-	for {
-		var state State
-		var stateChar rune
-		if _, err = fmt.Fscanf(con, "%c%d", &stateChar, &state.Count); err != nil {
-			continue
-		}
-		state.Opened = stateChar == 'O'
-
+	conn.Watch(func(state door.State) {
 		exec.Command("/bin/bash", COMMAND, state.OpenedStr(), fmt.Sprintf("%d", state.Count)).Run()
-	}
+	})
 }

@@ -1,49 +1,29 @@
 package main
 
 import (
-	"net/http"
 	"fmt"
-	"net"
+	"net/http"
 	"time"
 
+	"github.com/lc-tut/404room/local/libs/go/door"
 	"golang.org/x/net/websocket"
 )
 
-type State struct {
-	Opened bool
-	Count  int
-}
-
-func (s State) OpenedStr() string {
-	if s.Opened {
-		return "opened"
-	} else {
-		return "closed"
-	}
-}
-
 func main() {
-	con, err := net.Dial("unix", "/tmp/door.sock")
+	conn, err := door.Dial(door.DEFAULT_PATH)
 	if err != nil {
 		panic(err.Error())
 	}
-	defer con.Close()
+	defer conn.Close()
 
 	var connections []*websocket.Conn
 
-	stateUpdated := make(chan State)
-	var state State
-	go func() {
-		for {
-			var stateChar rune
-			if _, err = fmt.Fscanf(con, "%c%d", &stateChar, &state.Count); err != nil {
-				continue
-			}
-			state.Opened = stateChar == 'O'
-
-			stateUpdated <- state
-		}
-	}()
+	stateUpdated := make(chan door.State)
+	var state door.State
+	go conn.Watch(func(s door.State) {
+		state = s
+		stateUpdated <- s
+	})
 
 	http.Handle("/", http.FileServer(http.Dir("static")))
 
