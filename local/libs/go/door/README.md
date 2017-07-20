@@ -1,14 +1,16 @@
+ドアの状況を見るためのライブラリ
+================================
+
+とりあえずイベントを受け取れるだけで、現在の状況を取ったりは出来ない。
+
+## サンプル
+``` go
 package main
 
 import (
 	"fmt"
-	"os/exec"
 
 	"github.com/lc-tut/404room/local/libs/go/door"
-)
-
-var (
-	COMMAND = "/home/pi/door_event.bash"
 )
 
 func main() {
@@ -19,6 +21,7 @@ func main() {
 	defer conn.Close()
 
 	conn.Watch(func(state door.State) {
-		exec.Command("/bin/bash", COMMAND, state.OpenedStr(), fmt.Sprintf("%d", state.Count)).Run()
+		fmt.Println(state)
 	})
 }
+```
