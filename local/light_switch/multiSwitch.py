@@ -5,71 +5,84 @@ import RPi.GPIO as GPIO
 import time
 import sys
 
-### Set variables
-args = sys.argv
-outPins = [17, 26]
-servo = []
+if __name__ == "__main__":
 
-### Check parameter settings
-try:
-  args[1]
-except:
-  print("Error: Undefined parameter(on/off)")
-  sys.exit(1)
-else:
-  if args[1] == "on" or args[1] == "off":
-    print("Switch "+args[1])
-  else:
-    print("Error: Acceptable parameter is only 'off' or 'on'")
+  ### Set variables
+  args = sys.argv
+  # outPins = [17, 26]
+  outPins = {"right": 17, "left": 26}
+  servo = []
+
+  ### Check parameter settings
+  try:
+    args[1]
+  except:
+    print("Error: Undefined parameter(on/off)")
     sys.exit(1)
-
-try:
-  args[2]
-except:
-  args.append("all")
-else:
-  if args[2] == "right" or args[2] == "left":
-    print("Switch "+args[1]+"("+args[2]+")")
   else:
-    print("Error: Acceptable perameter is only 'right' or 'left'")
+    if args[1] != "on" and args[1] != "off":
+      print("Error: Acceptable parameter is only 'off' or 'on'")
+      sys.exit(1)
 
-### Init settings
-GPIO.setmode(GPIO.BCM)
-GPIO.setwarnings(False)
-
-### Set sensors
-for i in range(0, len(outPins)):
-  GPIO.setup(outPins[i], GPIO.OUT)
-  handle= GPIO.PWM(outPins[i], 50)
-  servo.append( handle )
-
-### Change switch status
-def lightChange(mode, servo):
-
-  if mode == "on" or mode == "off":
-    print("Switch "+mode)
+  try:
+    args[2]
+  except:
+    args.append("all")
   else:
-    print("Error: invalid parameter on lightChange()")
-    return None
+    if args[2] == "right" or args[2] == "left":
+      print("Switch "+args[1]+"("+args[2]+")")
+    else:
+      print("Error: Acceptable perameter is only 'right' or 'left'")
 
-  nums = {'default': 4.5, 'off': 5.8, 'on': 3.8}
+  ### Init settings
+  GPIO.setmode(GPIO.BCM)
+  GPIO.setwarnings(False)
 
-  servo.start(0.0)
+  ### Set sensors
+  for key,val in outPins.items():
+    GPIO.setup(val, GPIO.OUT)
+    handle= GPIO.PWM(val, 50)
+    servo.append( handle )
 
-  servo.ChangeDutyCycle( nums['default'] )
-  time.sleep(0.5)
+  ### Change switch status
+  def lightChange(servos, modes):
 
-  servo.ChangeDutyCycle( nums[mode] )
-  time.sleep(0.5)
+    servoSpeeds = {'default': 4.5, 'off': 5.8, 'on': 3.8}
 
-  servo.ChangeDutyCycle( nums['default'] )
-  time.sleep(0.5)
+    for i in range(0, len(servos)):
+      servos[i].start(0.0)
 
-### Main
-if args[2] == "right":
-  lightChange(args[1], servo[1])
-elif args[2] == "left":
-  lightChange(args[1], servo[0])
-elif args[2] == "all":
-  for i in range(0, len(outPins)):
-    lightChange(args[1], servo[i])
+    for i in range(0, len(servos)):
+      servos.ChangeDutyCycle( servoSpeeds['default'] )
+
+    time.sleep(0.5)
+
+    for i in range(0, len(servos)):
+      servos[i].ChangeDutyCycle( servoSpeeds[ modes[i] ] )
+
+    time.sleep(0.5)
+
+    for i in range(0, len(servos)):
+      servos.ChangeDutyCycle( servoSpeeds['default'] )
+
+    time.sleep(0.5)
+
+  ### Reverse set value(on/off)
+  def revVal(state):
+    if state == "on":
+      return "off"
+    elif state == "off":
+      return "on"
+    else:
+      return None
+
+  ### Main
+  if args[2] == "right":
+    modes = {"right": args[1], "left": revVal(args[1])}
+  elif args[2] == "left":
+    modes = {"right": revVal(args[1]), "left": args[1]}
+  elif args[2] == "all":
+    modes = {"right": args[1], "left": args[1]}
+  
+  lightChange(servos, modes)
+
