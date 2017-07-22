@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+'''
+usage: python multiSwitch.py off
+usage: python multiSwitch.py on right
+'''
+
 import RPi.GPIO as GPIO
 import time
 import sys
@@ -9,9 +14,8 @@ if __name__ == "__main__":
 
   ### Set variables
   args = sys.argv
-  # outPins = [17, 26]
   outPins = {"right": 17, "left": 26}
-  servo = []
+  switches = {}
 
   ### Check parameter settings
   try:
@@ -41,31 +45,29 @@ if __name__ == "__main__":
   ### Set sensors
   for key,val in outPins.items():
     GPIO.setup(val, GPIO.OUT)
-    handle= GPIO.PWM(val, 50)
-    servo.append( handle )
+    switches[key] = GPIO.PWM(val, 50)
 
   ### Change switch status
   def lightChange(servos, modes):
+    servoSpeeds = {"default": 4.5, "off": 5.8, "on": 3.8}
 
-    servoSpeeds = {'default': 4.5, 'off': 5.8, 'on': 3.8}
+    def setDefault:
+      for key in servos:
+        servos[key].ChangeDutyCycle( servoSpeeds['default'] )
+      time.sleep(0.5)
 
-    for i in range(0, len(servos)):
-      servos[i].start(0.0)
+    # いるのか確認してみる !!
+    for key in servos:
+       servos[key].start(0.0)
 
-    for i in range(0, len(servos)):
-      servos.ChangeDutyCycle( servoSpeeds['default'] )
+    setDefault()
 
+    for key in servos:
+      servos[key].ChangeDutyCycle( servoSpeeds[ modes[i] ] )
+    
     time.sleep(0.5)
 
-    for i in range(0, len(servos)):
-      servos[i].ChangeDutyCycle( servoSpeeds[ modes[i] ] )
-
-    time.sleep(0.5)
-
-    for i in range(0, len(servos)):
-      servos.ChangeDutyCycle( servoSpeeds['default'] )
-
-    time.sleep(0.5)
+    setDefault()
 
   ### Reverse set value(on/off)
   def revVal(state):
@@ -78,11 +80,11 @@ if __name__ == "__main__":
 
   ### Main
   if args[2] == "right":
-    modes = {"right": args[1], "left": revVal(args[1])}
+    setModes = {"right": args[1], "left": revVal(args[1])}
   elif args[2] == "left":
-    modes = {"right": revVal(args[1]), "left": args[1]}
+    setModes = {"right": revVal(args[1]), "left": args[1]}
   elif args[2] == "all":
-    modes = {"right": args[1], "left": args[1]}
+    setModes = {"right": args[1], "left": args[1]}
   
-  lightChange(servos, modes)
+  lightChange(switches, setModes)
 
