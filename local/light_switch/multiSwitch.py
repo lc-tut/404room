@@ -54,7 +54,6 @@ def Main(args):
         servos[key].ChangeDutyCycle( servoSpeeds['default'] )
       time.sleep(0.5)
 
-    # いるのか確認してみる !!
     for key in servos:
        servos[key].start(0.0)
 
