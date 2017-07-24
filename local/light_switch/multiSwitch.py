@@ -10,11 +10,9 @@ import RPi.GPIO as GPIO
 import time
 import sys
 
-if __name__ == "__main__":
-
+def Main(args): 
   ### Set variables
-  args = sys.argv
-  outPins = {"right": 17, "left": 26}
+  outPins = {"left": 17, "right": 26}
   switches = {}
 
   ### Check parameter settings
@@ -51,7 +49,7 @@ if __name__ == "__main__":
   def lightChange(servos, modes):
     servoSpeeds = {"default": 4.5, "off": 5.8, "on": 3.8}
 
-    def setDefault:
+    def setDefault():
       for key in servos:
         servos[key].ChangeDutyCycle( servoSpeeds['default'] )
       time.sleep(0.5)
@@ -63,28 +61,23 @@ if __name__ == "__main__":
     setDefault()
 
     for key in servos:
-      servos[key].ChangeDutyCycle( servoSpeeds[ modes[i] ] )
+      servos[key].ChangeDutyCycle( servoSpeeds[ modes[key] ] )
     
     time.sleep(0.5)
 
     setDefault()
 
-  ### Reverse set value(on/off)
-  def revVal(state):
-    if state == "on":
-      return "off"
-    elif state == "off":
-      return "on"
-    else:
-      return None
-
-  ### Main
+  ### Set modes
   if args[2] == "right":
-    setModes = {"right": args[1], "left": revVal(args[1])}
+    setModes = {"right": args[1]}
   elif args[2] == "left":
-    setModes = {"right": revVal(args[1]), "left": args[1]}
+    setModes = {"left": args[1]}
   elif args[2] == "all":
     setModes = {"right": args[1], "left": args[1]}
   
   lightChange(switches, setModes)
 
+# Main
+if __name__ == "__main__":
+  args = sys.argv
+  Main(args)
