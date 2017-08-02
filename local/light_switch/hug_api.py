@@ -3,9 +3,6 @@
 import hug
 import multiSwitch
 
-import subprocess
-
-
 # hug -f expr.py
 
 @hug.get('/switch')
@@ -17,8 +14,6 @@ def switch(mode, name):
       return 1
 
     multiSwitch.Main(args)
-
-    subprocess.call("aplay /home/pi/sounds/" ++".wav", shell=True)
   
   else:
     return 1

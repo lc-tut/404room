@@ -9,6 +9,7 @@ usage: python multiSwitch.py on right
 import RPi.GPIO as GPIO
 import time
 import sys
+import subprocess
 
 def Main(args): 
   ### Set variables
@@ -20,18 +21,20 @@ def Main(args):
     args[1]
   except:
     print("Error: Undefined parameter(on/off)")
-    sys.exit(1)
+    # sys.exit(1)
+    return 1
   else:
     if args[1] != "on" and args[1] != "off":
       print("Error: Acceptable parameter is only 'off' or 'on'")
-      sys.exit(1)
+      #sys.exit(1)
+      return 1
 
   try:
     args[2]
   except:
     args.append("all")
   else:
-    if args[2] == "right" or args[2] == "left":
+    if args[2] == "right" or args[2] == "left" or args[2] == "all":
       print("Switch "+args[1]+"("+args[2]+")")
     else:
       print("Error: Acceptable perameter is only 'right' or 'left'")
@@ -74,6 +77,7 @@ def Main(args):
   elif args[2] == "all":
     setModes = {"right": args[1], "left": args[1]}
   
+  subprocess.call("aplay /home/pi/sounds/light/" + args[1] + ".wav > /dev/null", shell=True,stdout=None)
   lightChange(switches, setModes)
 
 # Main
