@@ -18,7 +18,4 @@ class Sensor(metaclass=ABCMeta):
 
     def execute_plugins(self):
         for plugin in self.plugins:
-            self.__submit(plugin(self.store))
-
-    def __submit(self, func):
-        self.thread_pool_executor.submit(func)
+            self.thread_pool_executor.submit(plugin, self.store)
