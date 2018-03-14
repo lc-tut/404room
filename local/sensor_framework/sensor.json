@@ -1,0 +1,8 @@
+{
+  "sensors": {
+    "sensorName" : {
+      "name": "sensors.exampleSensor/Example",
+      "plugins": ["plugins.examplePlugin/example_plugin"]
+    }
+  }
+}
